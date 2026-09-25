@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 48 100% 96%;
+    --foreground: 22 78% 26%;
+    --card: 0 0% 100%;
+    --card-foreground: 22 78% 26%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 22 78% 26%;
+    --primary: 32 95% 44%;
+    --primary-foreground: 48 100% 96%;
+    --secondary: 38 92% 50%;
+    --secondary-foreground: 22 78% 26%;
+    --muted: 46 97% 87%;
+    --muted-foreground: 25 30% 40%;
+    --accent: 46 97% 87%;
+    --accent-foreground: 22 78% 26%;
+    --destructive: 355 78% 56%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 40 44% 86%;
+    --input: 40 44% 86%;
+    --ring: 32 95% 44%;
+    --radius: 1.25rem;
+    /* NaviOra brand palette — amber / cream / brown */
+    --navy: 22 78% 26%;
+    --mint: 46 97% 87%;
+    --coral: 38 92% 50%;
+    --peach: 48 100% 96%;
+    --emergency: 355 78% 56%;
+    --text-secondary: 25 30% 40%;
+    --font-heading: 'Merriweather', Georgia, 'Times New Roman', serif;
+    --font-body: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Merriweather', Georgia, 'Times New Roman', serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  }
+
+  .dark {
+    --background: 22 30% 12%;
+    --foreground: 48 100% 96%;
+    --card: 22 25% 16%;
+    --card-foreground: 48 100% 96%;
+    --popover: 22 25% 16%;
+    --popover-foreground: 48 100% 96%;
+    --primary: 38 92% 55%;
+    --primary-foreground: 22 78% 18%;
+    --secondary: 38 92% 50%;
+    --secondary-foreground: 48 100% 96%;
+    --muted: 22 20% 22%;
+    --muted-foreground: 44 30% 70%;
+    --accent: 22 30% 22%;
+    --accent-foreground: 48 100% 96%;
+    --destructive: 355 78% 56%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 22 20% 22%;
+    --input: 22 20% 22%;
+    --ring: 38 92% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply text-foreground font-body antialiased;
+    background:
+      radial-gradient(1100px 560px at 100% -8%, hsl(38 92% 50% / 0.10), transparent 60%),
+      radial-gradient(820px 480px at -8% 108%, hsl(46 97% 87% / 0.55), transparent 55%),
+      hsl(var(--background));
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-heading tracking-tight;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .glass {
+    background: hsl(var(--card) / 0.7);
+    backdrop-filter: blur(12px);
+  }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.7; }
+  70% { transform: scale(2.2); opacity: 0; }
+  100% { transform: scale(0.8); opacity: 0; }
+}
+.animate-pulse-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: hsl(var(--emergency));
+  animation: pulse-ring 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes route-draw {
+  to { stroke-dashoffset: 0; }
+}

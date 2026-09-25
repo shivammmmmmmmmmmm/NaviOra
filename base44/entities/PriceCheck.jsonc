@@ -1,0 +1,170 @@
+{
+  "name": "PriceCheck",
+  "type": "object",
+  "properties": {
+    "scenario": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "item": {
+      "type": "string"
+    },
+    "entered_price": {
+      "type": "number"
+    },
+    "currency": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "origin": {
+      "type": "string"
+    },
+    "destination": {
+      "type": "string"
+    },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "within_range",
+        "above_range",
+        "significant_difference",
+        "insufficient_data"
+      ]
+    },
+    "comparison_basis": {
+      "type": "string"
+    },
+    "freshness": {
+      "type": "string",
+      "enum": [
+        "current",
+        "recent",
+        "outdated",
+        "unknown"
+      ]
+    },
+    "median": {
+      "type": "number"
+    },
+    "average": {
+      "type": "number"
+    },
+    "min": {
+      "type": "number"
+    },
+    "max": {
+      "type": "number"
+    },
+    "count": {
+      "type": "number"
+    },
+    "source_count": {
+      "type": "number"
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "insufficient": {
+      "type": "boolean"
+    },
+    "explanation": {
+      "type": "string"
+    },
+    "factors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "what_to_do": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "date_published": {
+            "type": "string"
+          },
+          "retrieved": {
+            "type": "string"
+          },
+          "reliability": {
+            "type": "string"
+          },
+          "freshness": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "source_ref": {
+            "type": "number"
+          },
+          "as_of": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "rls": {
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "name": "LocalGuide",
+  "type": "object",
+  "properties": {
+    "query": {
+      "type": "string"
+    },
+    "place_name": {
+      "type": "string"
+    },
+    "place_type": {
+      "type": "string"
+    },
+    "lat": {
+      "type": "number"
+    },
+    "lng": {
+      "type": "number"
+    },
+    "context": {
+      "type": "string"
+    },
+    "do_list": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dont_list": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tips": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "essential_info": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "confidence": {
+      "type": "string",
+      "enum": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "confidence_note": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "place_name"
+  ],
+  "rls": {
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}

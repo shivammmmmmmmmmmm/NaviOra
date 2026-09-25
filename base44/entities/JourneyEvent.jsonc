@@ -1,0 +1,54 @@
+{
+  "name": "JourneyEvent",
+  "type": "object",
+  "properties": {
+    "trip_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "lat": {
+      "type": "number"
+    },
+    "lng": {
+      "type": "number"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "location",
+        "checkpoint_reached",
+        "checkpoint_missed",
+        "deviation",
+        "inactivity",
+        "checkin_safe",
+        "checkin_help",
+        "sos",
+        "status_change"
+      ]
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "trip_id",
+    "event_type"
+  ],
+  "rls": {
+    "read": {
+      "created_by_id": "{{user.id}}"
+    },
+    "create": {
+      "created_by_id": "{{user.id}}"
+    },
+    "update": {
+      "created_by_id": "{{user.id}}"
+    },
+    "delete": {
+      "created_by_id": "{{user.id}}"
+    }
+  }
+}
