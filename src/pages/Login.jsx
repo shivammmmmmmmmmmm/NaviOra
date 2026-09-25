@@ -9,6 +9,7 @@ import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
 import Turnstile from "@/components/Turnstile";
 import { safeReturnTo } from "@/lib/authReturnTo";
+import { useAuth } from "@/lib/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,6 +17,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
+  const { backendAvailable, demoLogin } = useAuth();
   // Post-login destination (e.g. the MCP OAuth consent page sends users here
   // with returnTo so the grant flow can resume). Same-origin paths only.
   const returnTo = safeReturnTo();
@@ -25,6 +27,11 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
+      if (!backendAvailable) {
+        demoLogin();
+        window.location.href = returnTo;
+        return;
+      }
       await base44.auth.loginViaEmailPassword(email, password);
       window.location.href = returnTo;
     } catch (err) {
@@ -35,6 +42,11 @@ export default function Login() {
   };
 
   const handleGoogle = () => {
+    if (!backendAvailable) {
+      demoLogin();
+      window.location.href = returnTo;
+      return;
+    }
     base44.auth.loginWithProvider("google", returnTo);
   };
 

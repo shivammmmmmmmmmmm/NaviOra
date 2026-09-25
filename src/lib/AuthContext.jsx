@@ -4,8 +4,25 @@ import { appParams } from '@/lib/app-params';
 
 const AuthContext = createContext();
 
+// Local demo session used ONLY when the Base44 backend is unreachable, so the
+// app can be explored in the sandbox preview. Real auth (email/Google) runs
+// unchanged whenever the backend is connected, and any stale demo session is
+// cleared the moment the backend comes back online.
+const DEMO_STORAGE_KEY = 'naviora_demo_user';
+const DEMO_USER = { id: 'demo-user', full_name: 'Demo Traveler', email: 'demo@naviora.app', _demo: true };
+const loadDemoSession = () => {
+  try { return JSON.parse(localStorage.getItem(DEMO_STORAGE_KEY) || 'null'); } catch { return null; }
+};
+const saveDemoSession = (u) => {
+  try { localStorage.setItem(DEMO_STORAGE_KEY, JSON.stringify(u)); } catch { /* noop */ }
+};
+const clearDemoSession = () => {
+  try { localStorage.removeItem(DEMO_STORAGE_KEY); } catch { /* noop */ }
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [backendAvailable, setBackendAvailable] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [isLoadingPublicSettings, setIsLoadingPublicSettings] = useState(true);
@@ -18,6 +35,17 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAppState = async () => {
+    // Restore a local demo session (backend not connected) without hitting the API.
+    const demo = loadDemoSession();
+    if (demo) {
+      setUser(demo);
+      setIsAuthenticated(true);
+      setAuthChecked(true);
+      setBackendAvailable(false);
+      setIsLoadingAuth(false);
+      setIsLoadingPublicSettings(false);
+      return;
+    }
     try {
       setIsLoadingPublicSettings(true);
       setAuthError(null);
@@ -25,6 +53,8 @@ export const AuthProvider = ({ children }) => {
       try {
         const publicSettings = await base44.app.getPublicSettings();
         setAppPublicSettings(publicSettings);
+        setBackendAvailable(true);
+        clearDemoSession(); // backend is live — discard any stale demo session
         
         // If we got the app public settings successfully, check if user is authenticated
         if (appParams.token) {
@@ -37,6 +67,7 @@ export const AuthProvider = ({ children }) => {
         setIsLoadingPublicSettings(false);
       } catch (appError) {
         console.error('App state check failed:', appError);
+        setBackendAvailable(false);
         
         // Handle app-level errors
         if (appError.status === 403 && appError.data?.extra_data?.reason) {
@@ -102,7 +133,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const demoLogin = () => {
+    saveDemoSession(DEMO_USER);
+    setUser(DEMO_USER);
+    setIsAuthenticated(true);
+    setAuthChecked(true);
+    setAuthError(null);
+    setIsLoadingAuth(false);
+    setIsLoadingPublicSettings(false);
+  };
+
   const logout = (shouldRedirect = true) => {
+    clearDemoSession();
     setUser(null);
     setIsAuthenticated(false);
     
@@ -129,7 +171,9 @@ export const AuthProvider = ({ children }) => {
       authError,
       appPublicSettings,
       authChecked,
+      backendAvailable,
       logout,
+      demoLogin,
       navigateToLogin,
       checkUserAuth,
       checkAppState
