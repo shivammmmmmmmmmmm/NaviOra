@@ -1,0 +1,30 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.base44
+    working_dir: /app
+    # Bind-mount the cloned source so edits hot-reload through Vite.
+    volumes:
+      - ./:/app
+      # Persist ~/.base44 (seeded auth + CLI assets) across restarts.
+      - base44_home:/root/.base44
+    ports:
+      - "3000:3000"
+    environment:
+      # Lets Vite accept the preview's external hostname (set by the platform).
+      - __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS
+    # Real Base44 credentials (access/refresh tokens + app id) are delivered
+    # by the platform here; never committed to the repo.
+    env_file:
+      - /run/base44/app.env
+    # Install deps, link the project to the Base44 app (once), then start the
+    # local backend + Vite frontend together via `base44 dev`.
+    # $$ escapes to $ so the shell resolves BASE44_APP_ID from the container env.
+    command: >-
+      sh -c "npm install --no-audit --no-fund
+      && (test -f base44/.app.jsonc || base44 link --app-id $$BASE44_APP_ID)
+      && base44 dev"
+
+volumes:
+  base44_home:

@@ -15,5 +15,13 @@ export default defineConfig({
       visualEditAgent: true
     }),
     react(),
-  ]
+  ],
+  server: {
+    // Bind all interfaces so the preview proxy can reach the dev server.
+    host: true,
+    // Frontend must be on port 3000 for the sandbox preview.
+    port: 3000,
+    // Accept the preview's external hostname (sandbox host rotates).
+    allowedHosts: true,
+  },
 });

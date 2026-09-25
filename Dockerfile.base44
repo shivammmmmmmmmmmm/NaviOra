@@ -1,0 +1,13 @@
+# Base44 dev runtime: Node (frontend/Vite) + Deno + Base44 CLI (local backend).
+# This is a tooling-only base image; the app source is bind-mounted at runtime,
+# never baked in, so edits are picked up live by the Vite dev server.
+FROM node:22
+
+# Base44 CLI (provides `base44 dev`, which runs the local Deno backend + frontend)
+RUN npm install -g base44@latest
+
+# Deno runtime — the local Base44 backend runs on it (the CLI checks `deno --version`)
+RUN curl -fsSL https://deno.land/install.sh | sh -s -- --yes \
+    && ln -s /root/.deno/bin/deno /usr/local/bin/deno
+
+WORKDIR /app
