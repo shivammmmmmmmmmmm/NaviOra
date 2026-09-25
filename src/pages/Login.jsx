@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
+import Turnstile from "@/components/Turnstile";
 import { safeReturnTo } from "@/lib/authReturnTo";
 
 export default function Login() {
@@ -14,6 +15,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
   // Post-login destination (e.g. the MCP OAuth consent page sends users here
   // with returnTo so the grant flow can resume). Same-origin paths only.
   const returnTo = safeReturnTo();
@@ -116,7 +118,8 @@ export default function Login() {
             />
           </div>
         </div>
-        <Button type="submit" className="w-full h-12 font-medium" disabled={loading}>
+        <Turnstile onVerify={setTurnstileToken} className="pb-2" />
+        <Button type="submit" className="w-full h-12 font-medium" disabled={loading || !turnstileToken}>
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
